@@ -1,24 +1,25 @@
-import logo from './logo.svg';
+import React, { useEffect } from 'react';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import './App.css';
+import CobaMap from './components/coba/CobaMap';
+import CobaSearchLoc from './components/coba/CobaSearchLoc';
+import CreateEvent from './components/event/CreateEvent';
+import Home from './components/home/Home';
 
 function App() {
+  useEffect(() => {
+    document.title = "React"
+  }, [])
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/home" element={<Home/>}/>
+        {/* <Route path="/event/:id" element={<Community/>} /> */}
+        <Route path="/create" element={<CreateEvent/>} />
+        <Route path='*' element={<Navigate to="/home" />} />
+      </Routes>
+  </BrowserRouter>
   );
 }
 
