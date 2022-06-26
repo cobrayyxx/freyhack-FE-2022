@@ -12,34 +12,31 @@ const HomeCard = ({event}) => {
       {state: {
         event: event
       }}
-
     )
   }
 
+  const dateFormat = (date) => {
+    date = new Date(date)
+    return `${date.getDate()} ${date.toLocaleString('default', { month: 'long' })} ${date.getFullYear()}, ${date.toLocaleTimeString()}`
+  }
+
   return (
-      <Card sx={{ width: "300px", margin: 'auto'}}>
-        {/* <CardMedia
-          component="img"
-          width="100%"
-          height={200}
-          image={event.picture ? event.picture: placeholeder_image}
-          alt={`Picture of ${event.name}`}
-        /> */}
+      <Card sx={{ width: "280px", margin: 'auto'}}>
         <CardContent>
-          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-            {new Date(event.date_time).getDate()}-{new Date(event.date_time).getMonth()}-{new Date(event.date_time).getFullYear()}
+          <Typography noWrap sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+            {dateFormat(event.date_time)}
           </Typography>
-          <Typography variant="h5" component="div">
+          <Typography noWrap variant="h5" component="div">
             {event.name}
           </Typography>
-          <Typography sx={{ mb: 1.5 }} color="text.secondary">
+          <Typography sx={{ mb: 1.5 }} noWrap color="text.secondary" >
             {event.location}
           </Typography>
-          <Typography variant="body2">
+          <Typography variant="body2" sx={{height:80, overflow:"hidden", whiteSpace:'normal' }}>
             {event.description}
           </Typography>
         </CardContent>
-        <CardActions>
+        <CardActions sx={{p:2, display: "flex", justifyContent: "flex-end"}}>
           <Button size="small" onClick={redirect}>Learn More</Button>
         </CardActions>
       </Card>

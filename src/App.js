@@ -4,6 +4,7 @@ import './App.css';
 import CobaMap from './components/coba/CobaMap';
 import CobaSearchLoc from './components/coba/CobaSearchLoc';
 import CreateEvent from './components/event/CreateEvent';
+import Event from './components/event/Event';
 import Home from './components/home/Home';
 
 function App() {
@@ -15,7 +16,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/home" element={<Home/>}/>
-        {/* <Route path="/event/:id" element={<Community/>} /> */}
+        <Route path="/event/:id" element={<Event/>} />
         <Route path="/create" element={<CreateEvent/>} />
         <Route path='*' element={<Navigate to="/home" />} />
       </Routes>

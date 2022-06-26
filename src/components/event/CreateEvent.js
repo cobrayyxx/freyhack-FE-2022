@@ -66,8 +66,6 @@ const CreateEvent = () => {
         Create an activity
       </Typography>
       <Stack spacing={2}>
-        <br/>Current Selected Location : {inputLocation} <br/>
-        &#123; {inputLat}, {inputLon} &#125;<br/>
         <TextField
           required
           label="Activity Name"
@@ -170,8 +168,6 @@ const CreateEvent = () => {
           Create
         </Button>
       </Stack>
-
- 
     </Paper>
   )
 }
