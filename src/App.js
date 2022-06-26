@@ -10,6 +10,7 @@ import Register from './components/login/register';
 import Login from './components/login/login'
 import Logout from './components/login/logout';
 import { UserContext, UserProvider } from './context/UserContext';
+import AppRoutes from './AppRoutes';
 
 function App() {
 
@@ -17,36 +18,12 @@ function App() {
     document.title = "Aktivitee"
   }, [])
 
-  const token = localStorage.getItem('token')
-  console.log(token)
-  if (token){
   return (
-    <UserProvider>   
-    <BrowserRouter>
-      <Routes>
-        <Route path="/home" element={<Home/>}/>
-        <Route path="/event/:id" element={<Event/>} />
-        <Route path="/create" element={<CreateEvent/>} />
-        <Route path='*' element={<Navigate to="/home" />} />
-        <Route path="/logout" element={<Logout/>}/>
-        <Route path="/login" element={<Login/>}/>
-      </Routes>
-  </BrowserRouter>
-  </UserProvider>
-  );
-  } else {
-    return (
-      <UserProvider>   
-      <BrowserRouter>
-        <Routes>
-          <Route path='*' element={<Navigate to="/login" />} />
-          <Route path="/register" element={<Register/>}/>
-          <Route path="/login" element={<Login/>}/>
-        </Routes>
-    </BrowserRouter>
+    <UserProvider>
+      <AppRoutes></AppRoutes>
     </UserProvider>
-    );
-  }
+
+  )
 }
 
 export default App;

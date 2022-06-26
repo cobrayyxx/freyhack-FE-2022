@@ -114,17 +114,25 @@ export default function Event() {
         </Typography>
       </CardContent>
       <CardActions disableSpacing sx={{p:2, display: "flex", justifyContent: "flex-end"}} >
-        {event.enrolled.length >= event.num_participants?
+        {event.enrolled.length >= event.num_participants ?
           <Button disabled>
             Activity is full
           </Button>
           :
+          event.creator === currentUser ?
           <Button variant="contained" onClick={handleDialogOpen}>
-          { event.creator !== currentUser ?
-            <>Request to join</> : <>Incoming requests</>
-          }
-        </Button>
-      } 
+            Check requests
+          </Button>
+          :
+          event.requests.filter(e => e.requester_id === currentUser).length !== 0 ?
+          <Button disabled>
+            Requested
+          </Button>
+          :
+          <Button variant="contained" onClick={handleDialogOpen}>
+            Request to join
+          </Button>
+        } 
       </CardActions>
       <Dialog
           fullWidth

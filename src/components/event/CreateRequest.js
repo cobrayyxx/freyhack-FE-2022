@@ -26,13 +26,9 @@ const CreateRequest = ({event, setEvent, onClose}) => {
       "event_id": id,
       "requester_id": "string",
       "request_message": inputContent,
-      "accept": true
+      "accept": null
     }
-
-    let newRequests = event.requests
-    newRequests.push(data)
-    setEvent((prevEvent) => ({...prevEvent, requests:newRequests}))
-    
+    window.location.reload()
     try{
       await axios.post(`https://freyhack-be-2022.herokuapp.com/api/v1/request`, data, options)
     } catch(err) {
