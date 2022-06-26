@@ -135,6 +135,7 @@ function Home() {
     left: 'auto',
     position: 'fixed',
   };
+  console.log(token)
   return (
     <>
       <Fab onClick={handleCreate} style={fab_style} color="primary" aria-label="add">

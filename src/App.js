@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import './App.css';
 import CobaMap from './components/coba/CobaMap';
@@ -8,17 +8,18 @@ import Event from './components/event/Event';
 import Home from './components/home/Home';
 import Register from './components/login/register';
 import Login from './components/login/login'
-import { UserProvider } from './context/UserContext';
+import { UserProvider, UserContext } from './context/UserContext';
 
 function App() {
   useEffect(() => {
     document.title = "React"
   }, [])
-  
-  return (
-    <UserProvider>
-    <BrowserRouter>
 
+  const { token } = useContext(UserContext);
+  if (token){
+  return (
+    <UserProvider>   
+    <BrowserRouter>
       <Routes>
         <Route path="/home" element={<Home/>}/>
         <Route path="/event/:id" element={<Event/>} />
@@ -30,6 +31,7 @@ function App() {
   </BrowserRouter>
   </UserProvider>
   );
+  }
 }
 
 export default App;
