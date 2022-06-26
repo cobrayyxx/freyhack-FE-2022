@@ -26,8 +26,13 @@ function Home() {
       let  res_event = res.data
       console.log(res_event)
       setEvent(res_event)
-    } catch {
-      alert("An error has occured")
+    } catch (err) {
+      console.log(err)
+      if (err.response && err.response.status === 401){
+        navigate('/login')
+      } else {
+        alert("Something went wrong")
+      }
     }
 
     // let res_event = [

@@ -11,11 +11,11 @@ import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import { Box } from '@mui/material';
 
 
-const Map = ({position}) => {
+const Map = ({position, location}) => {
   let DefaultIcon = L.icon({
     iconUrl: icon,
     shadowUrl: iconShadow,
-    iconAnchor: [17, 46]
+    iconAnchor: [14, 43]
   });
 
   L.Marker.prototype.options.icon = DefaultIcon;
@@ -28,7 +28,7 @@ const Map = ({position}) => {
       />
       <Marker position={position}>
         <Popup>
-          Location
+          {location}
         </Popup>
       </Marker>
     </MapContainer>

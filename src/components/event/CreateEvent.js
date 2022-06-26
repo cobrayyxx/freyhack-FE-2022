@@ -60,15 +60,16 @@ const CreateEvent = () => {
       longitude: inputLon,
       location: inputLocation,
       contact: inputContact,
-      maxParticipants: inputParticipant,
-      datetime: new Date(inputTime).getTime(),
+      num_participants: inputParticipant,
+      date_time: new Date(inputTime).getTime(),
       creator: ""
     }
     console.log(data)
     try{
-      let res = await axios.post(`https://freyhack-be-2022.herokuapp.com/api/v1/event`, options, data)
+      let res = await axios.post(`https://freyhack-be-2022.herokuapp.com/api/v1/event`, data, options)
       setSearchResult(res.data)
       console.log(res.data)
+      navigate('/home')
     } catch(err) {
       console.log(err)
       if (err.response && err.response.status === 401){
@@ -90,7 +91,7 @@ const CreateEvent = () => {
       onSubmit={handleSubmit}
       sx={{backgroundColor:'white', m:'32px auto', p: 4, maxWidth:800}}
       >
-      <Typography variant="h5">
+      <Typography variant="h5" sx={{mb:2}}>
         Create an activity
       </Typography>
       <Stack spacing={2}>

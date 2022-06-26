@@ -6,7 +6,7 @@ import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import Typography from '@mui/material/Typography';
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Tab, Tabs } from '@mui/material';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Map from './Map';
 import CreateRequest from './CreateRequest';
@@ -32,7 +32,8 @@ export default function Event() {
   const [value, setValue] = useState(0);
   const [event, setEvent] = useState(stateData)
   const [openDialog, setOpenDialog] = useState(false)
-  const {getFromLocalStorage} = useContext(UserContext)
+  const {getFromLocalStorage, token, currentUser} = useContext(UserContext)
+  const navigate = useNavigate()
 
   const handleDialogOpen = () => {
     setOpenDialog(true);
@@ -41,38 +42,47 @@ export default function Event() {
   const handleDialogClose = () => {
     setOpenDialog(false);
   };
-  
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
 
 
   const fetchData = async () => {
-    // let data = {
-    //   id: 123,
-    //   name: "Komunitas tinju",
-    //   location: "belakang rumah saya",
-    //   schedule: "abc",
-    //   description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut tincidunt mauris sit amet nisi tristique consequat. Proin ex massa, porttitor et euismod quis, ornare nec elit. Sed mauris tortor, vehicula eget erat non, posuere sagittis leo. Etiam ut leo semper, suscipit mauris vitae, tempor leo. Nam varius ipsum in erat luctus, elementum dignissim ipsum accumsan. Curabitur et mollis sapien. Mauris congue justo eget felis rhoncus vehicula. Aliquam gravida justo suscipit nulla tempor, sed pellentesque sem rutrum. Donec dictum lorem a quam sodales, et semper mauris vulputate. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aliquam maximus sagittis nisi, ut auctor sapien. Mauris id libero euismod, mattis turpis non, laoreet quam. Nulla aliquam sagittis diam vel mattis. Morbi volutpat posuere elit, in fringilla lorem pretium at. In tempus pulvinar congue. Donec porta pellentesque tortor nec viverra.",
-    //   picture:"https://www.planetware.com/wpimages/2020/02/france-in-pictures-beautiful-places-to-photograph-eiffel-tower.jpg",
-    //   username_creator: "kreasi"
-    // }
-    // setEvent(data)
-    // let res = await axios.get(
-    //   `https://communify-be-api.herokuapp.com/api/v1/community/${id}`)
-    // let  res_community = res.data
-    // console.log(res_community)
-    // setEvent(res_community)
+    try{
+      const options = {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      }
+      let res = await axios.get(
+        `https://freyhack-be-2022.herokuapp.com/api/v1/events/${id}`, options)
+      let  res_community = res.data
+      setEvent(res_community)
+    } catch(err) {
+      console.log(err)
+      if (err.response && err.response.status === 401){
+        navigate('/login')
+      } else if (err.response && err.response.data) {
+        alert(err.response.data.detail)
+      } else {
+        alert("Something went wrong")
+      }
+    }
   }
 
   useEffect(() => {
     getFromLocalStorage()
-    fetchData()
   }, [])
+
+  useEffect(() => {
+    token && fetchData()
+  }, [token])
 
   return (
     <Card sx={{ maxWidth: 600, margin: 'auto', marginTop:4}}>
-      <Map position={[event.latitude, event.longitude]}/>
+      <Map 
+        position={event.latitude ? [event.latitude, event.longitude] : [0,0]}
+        location={event.location}
+      />
       <CardContent>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
           {event.location}
@@ -85,7 +95,7 @@ export default function Event() {
           </Grid>
           <Grid item>
             <Typography>
-              0/{event.num_participants} 
+            {event.enrolled.length}/{event.num_participants} 
             </Typography>
           </Grid>
         </Grid>
@@ -104,9 +114,19 @@ export default function Event() {
         </Typography>
       </CardContent>
       <CardActions disableSpacing sx={{p:2, display: "flex", justifyContent: "flex-end"}} >
-        <Button variant="contained" onClick={handleDialogOpen}>
-          Request to join
+        {event.enrolled.length >= event.num_participants?
+          <Button disabled>
+            Activity is full
+          </Button>
+          :
+          <Button variant="contained" onClick={handleDialogOpen}>
+          { event.creator !== currentUser ?
+            <>Request to join</> : <>Incoming requests</>
+          }
         </Button>
+      } 
+
+
       </CardActions>
       <Dialog
           fullWidth
@@ -116,24 +136,11 @@ export default function Event() {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <CreateRequest setEvent={setEvent} onClose={handleDialogClose}/>
-          {/* if user is owner */}
-          <RequestList setEvent={setEvent} onClose={handleDialogClose}/>
-        {/* <DialogTitle id="alert-dialog-title">
-          {"Use Google's location service?"}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Let Google help apps determine location. This means sending anonymous
-            location data to Google, even when no apps are running.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDialogClose}>Disagree</Button>
-          <Button onClick={handleDialogClose} autoFocus>
-            Agree
-          </Button>
-        </DialogActions> */}
+          { event.creator === currentUser ?
+            <RequestList event={event} setEvent={setEvent} onClose={handleDialogClose}/>
+            : <CreateRequest event={event} setEvent={setEvent} onClose={handleDialogClose}/>
+          }
+
       </Dialog>
     </Card>
   );
