@@ -29,6 +29,7 @@ function App() {
         <Route path="/create" element={<CreateEvent/>} />
         <Route path='*' element={<Navigate to="/home" />} />
         <Route path="/logout" element={<Logout/>}/>
+        <Route path="/login" element={<Login/>}/>
       </Routes>
   </BrowserRouter>
   </UserProvider>

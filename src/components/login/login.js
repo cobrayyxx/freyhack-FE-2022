@@ -38,7 +38,7 @@ function Login() {
             setToken(response.data.access_token)
             localStorage.setItem('token', response.data.access_token)
             localStorage.setItem('user', data.username)
-            window.location.reload();
+            navigate('/')
         })
         .catch(error => {
             console.error('There was an error!', error);

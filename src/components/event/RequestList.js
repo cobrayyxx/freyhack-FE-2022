@@ -16,7 +16,7 @@ const RequestList = ({event, setEvent}) => {
         </Typography>
         {event && event.requests.map((val, idx)=> (
           val.accept === null &&
-          <Request key={idx} commentData={val}/>
+          <Request key={idx} commentData={val} event={event} setEvent={setEvent}/>
         ))}
       </Stack>
     </Box>

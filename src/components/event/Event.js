@@ -5,7 +5,7 @@ import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import Typography from '@mui/material/Typography';
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Tab, Tabs } from '@mui/material';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, Grid, Stack, Tab, Tabs } from '@mui/material';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Map from './Map';
@@ -125,8 +125,6 @@ export default function Event() {
           }
         </Button>
       } 
-
-
       </CardActions>
       <Dialog
           fullWidth
@@ -142,6 +140,21 @@ export default function Event() {
           }
 
       </Dialog>
+      
+      { event.creator === currentUser && 
+        <Box sx={{p:2}} >
+          <Divider orientation="horizontal" flexItem sx={{mb:1}} />
+          <Stack 
+            spacing={1}
+            divider={<Divider orientation="horizontal" flexItem />}
+          >
+            <Typography variant='h5'>Participants</Typography>
+            {event.enrolled.map((val,idx)=>(
+              <Typography  variant="body2">{val.username}</Typography>
+            ))}
+          </Stack>
+        </Box>
+      }
     </Card>
   );
 }

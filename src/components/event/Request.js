@@ -1,11 +1,11 @@
-import { Button, Typography } from '@mui/material'
+import { Button, Snackbar, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import axios from 'axios'
 import React, { useContext, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { UserContext } from '../../context/UserContext'
 
-const Request = ({commentData}) => {
+const Request = ({commentData, event, setEvent}) => {
   const {token, getFromLocalStorage} = useContext(UserContext)
   let navigate = useNavigate()
 
@@ -27,6 +27,13 @@ const Request = ({commentData}) => {
     }
     try{
       await axios.put(`https://freyhack-be-2022.herokuapp.com/api/v1/request/acc/${commentData.id}`, data, options)
+      let userList = event.enrolled
+      let requestList = event.requests
+      userList.push({username: commentData.requester_id})
+      requestList = requestList.filter(function (el) {
+        return commentData.id !== el.id
+      });
+      setEvent((prev) => ({...prev, enrolled: userList, requests: requestList}))
     } catch(err) {
       console.log(err)
       if (err.response && err.response.status === 401){
@@ -42,10 +49,17 @@ const Request = ({commentData}) => {
   const handleDecline = async () => {
     try{
       await axios.delete(`https://freyhack-be-2022.herokuapp.com/api/v1/request/reject/${commentData.id}`, options)
+      let requestList = event.requests
+      requestList = requestList.filter(function (el) {
+        return commentData.id !== el.id
+      });
+      setEvent((prev) => ({...prev, requests: requestList}))
     } catch(err) {
       console.log(err)
       if (err.response && err.response.status === 401){
         navigate('/login')
+      } else if (err.response && err.response.data) {
+        alert(err.response.data.detail)
       } else {
         alert("Something went wrong")
       }
