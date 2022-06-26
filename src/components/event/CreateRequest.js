@@ -64,7 +64,6 @@ const CreateRequest = ({event, setEvent, onClose}) => {
             size="normal" 
             variant="standard"
             sx={{width:"100%"}}
-            
           />
           <Box sx={{ display: "flex", justifyContent: "flex-end"}}>
             <Button

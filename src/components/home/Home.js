@@ -1,15 +1,15 @@
-import { Fab, Grid, IconButton, Typography, Menu, MenuItem } from '@mui/material';
+import { Fab, Grid, IconButton, Typography, Menu, MenuItem, TextField, Paper, InputBase } from '@mui/material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import axios from 'axios';
 import React, { useEffect, useState, useContext } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import HomeCard from './HomeCard';
-import './Home.css'
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../context/UserContext';
 
 function Home() {
   const [event, setEvent] = useState([])
+  const [searchQuery, setSearchQuery] = useState("")
   const { currentUser, token, getFromLocalStorage } = useContext(UserContext);
   let navigate = useNavigate()
 
@@ -32,7 +32,7 @@ function Home() {
       }
     }
     try{
-      let res = await axios.get("https://freyhack-be-2022.herokuapp.com/api/v1/event", options)
+      let res = await axios.get(`https://freyhack-be-2022.herokuapp.com/api/v1/search?query=${searchQuery}`, options)
       let  res_event = res.data
       console.log(res_event)
       setEvent(res_event)
@@ -52,7 +52,7 @@ function Home() {
 
   useEffect(() => {
     token && fetchData()
-  }, [token])
+  }, [token, searchQuery])
 
   const fab_style = {
     margin: 0,
@@ -76,13 +76,13 @@ function Home() {
       >
           <Grid item xs={6}>
             <Typography
-              variant="h4" 
+              variant="h6" 
               align="left" 
               sx={{ m:2, marginLeft:4, color : "#7DF9FF", fontWeight: 900, fontFamily: 'Lucida Console'}}>
                   Aktivitee
             </Typography>
           </Grid>
-          <Grid item  xs={6}>
+          <Grid item xs={6}>
             <Typography
               align="right"
               sx={{color : "white", marginRight:5}} 
@@ -109,7 +109,19 @@ function Home() {
               <MenuItem onClick={event =>  window.location.href='/logout'}>Logout</MenuItem>
             </Menu>
             </Typography>
-            
+          </Grid>
+          <Grid item xs={12} align="center" padding={0} >
+            <Paper
+              sx={{ display: 'flex', alignItems: 'center', width: "80%", maxWidth:600 }}
+            >
+            <InputBase
+                sx={{ pl: 1, flex: 1 }}
+                placeholder="Search"
+                value={searchQuery}
+                onChange={(e)=>setSearchQuery(e.target.value)}
+                inputProps={{ 'aria-label': 'search google maps' }}
+              />
+            </Paper>
           </Grid>
           {event.map((val, idx) => (
             <Grid item key={idx} lg={3} md={4} sm={6} xs={12} sx={{padding: 0}}>
