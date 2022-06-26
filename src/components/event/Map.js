@@ -21,7 +21,7 @@ const Map = ({position, location}) => {
   L.Marker.prototype.options.icon = DefaultIcon;
   return(
     <Box sx={{height: 300}}>
-    <MapContainer center={position} zoom={20} scrollWheelZoom={false}>
+    <MapContainer center={position} zoom={16} scrollWheelZoom={false}>
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
