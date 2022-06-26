@@ -37,6 +37,8 @@ function Login() {
             console.log(response);
             setCurrentUser(data.username);
             setToken(response.data.access_token)
+            localStorage.setItem('token', response.data.access_token)
+            localStorage.setItem('user', data.username)
             navigate((`/home`));
         })
         .catch(error => {

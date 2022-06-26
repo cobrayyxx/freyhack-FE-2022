@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
@@ -11,6 +11,7 @@ import axios from 'axios';
 import Map from './Map';
 import CreateRequest from './CreateRequest';
 import RequestList from './RequestList';
+import { UserContext } from '../../context/UserContext';
 
 function a11yProps(index) {
     return {
@@ -30,7 +31,8 @@ export default function Event() {
   let stateData = state? state.event: {}
   const [value, setValue] = useState(0);
   const [event, setEvent] = useState(stateData)
-  const [openDialog, setOpenDialog] = useState()
+  const [openDialog, setOpenDialog] = useState(false)
+  const {getFromLocalStorage} = useContext(UserContext)
 
   const handleDialogOpen = () => {
     setOpenDialog(true);
@@ -64,6 +66,7 @@ export default function Event() {
   }
 
   useEffect(() => {
+    getFromLocalStorage()
     fetchData()
   }, [])
 

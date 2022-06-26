@@ -1,8 +1,15 @@
 import { Button, Typography } from '@mui/material'
 import { Box } from '@mui/system'
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
+import { UserContext } from '../../context/UserContext'
 
 const Request = ({commentData}) => {
+  const {user, token, getFromLocalStorage} = useContext(UserContext)
+
+  useEffect(() => {
+    getFromLocalStorage()
+  }, [])
+  
   return (
     <>
       {commentData && (
