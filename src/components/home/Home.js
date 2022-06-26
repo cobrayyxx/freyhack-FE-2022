@@ -1,12 +1,14 @@
 import { Fab, Grid, Stack } from '@mui/material';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import HomeCard from './HomeCard';
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../../context/UserContext';
 
 function Home() {
   const [event, setEvent] = useState([])
+  const { currentUser, token } = useContext(UserContext);
   let navigate = useNavigate()
 
   const handleCreate = () => navigate('/create')
@@ -123,7 +125,6 @@ function Home() {
     left: 'auto',
     position: 'fixed',
   };
-
   return (
     <>
       <Fab onClick={handleCreate} style={fab_style} color="primary" aria-label="add">
