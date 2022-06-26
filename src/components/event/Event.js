@@ -5,7 +5,7 @@ import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import Typography from '@mui/material/Typography';
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Tab, Tabs } from '@mui/material';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Tab, Tabs } from '@mui/material';
 import { useLocation, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Map from './Map';
@@ -68,17 +68,33 @@ export default function Event() {
   }, [])
 
   return (
-    <Card sx={{ maxWidth: 600, margin: 'auto'}}>
+    <Card sx={{ maxWidth: 600, margin: 'auto', marginTop:4}}>
       <Map position={[event.latitude, event.longitude]}/>
       <CardContent>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          {dateFormat(event.date_time)}
+          {event.location}
         </Typography>
-        <Typography variant="h5" component="div">
-          {event.name}
+        <Grid container justifyContent="flex-start" alignItems="center" spacing={2}>
+          <Grid item>
+            <Typography variant="h5">
+              {event.name} 
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Typography>
+              0/{event.num_participants} 
+            </Typography>
+          </Grid>
+        </Grid>
+
+        <Typography  color="text.secondary">
+        <Box component="span" color="text.primary">{dateFormat(event.date_time)}</Box> 
+        </Typography>
+        <Typography  color="text.secondary">
+         Made by: {event.creator}
         </Typography>
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          {event.location}
+         Contact: {event.contact}
         </Typography>
         <Typography variant="body2">
           {event.description}
@@ -97,9 +113,9 @@ export default function Event() {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <CreateRequest></CreateRequest>
+          <CreateRequest setEvent={setEvent} onClose={handleDialogClose}/>
           {/* if user is owner */}
-          <RequestList></RequestList>
+          <RequestList setEvent={setEvent} onClose={handleDialogClose}/>
         {/* <DialogTitle id="alert-dialog-title">
           {"Use Google's location service?"}
         </DialogTitle>

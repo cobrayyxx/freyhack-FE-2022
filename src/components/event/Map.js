@@ -15,6 +15,7 @@ const Map = ({position}) => {
   let DefaultIcon = L.icon({
     iconUrl: icon,
     shadowUrl: iconShadow,
+    iconAnchor: [17, 46]
   });
 
   L.Marker.prototype.options.icon = DefaultIcon;
@@ -27,7 +28,7 @@ const Map = ({position}) => {
       />
       <Marker position={position}>
         <Popup>
-          Event Location
+          Location
         </Popup>
       </Marker>
     </MapContainer>
