@@ -4,11 +4,17 @@ export const UserContext = createContext();
 export const UserProvider = (props) => {
     const [currentUser, setCurrentUser] = useState();
     const [token, setToken] = useState();
+    const getFromLocalStorage = () => {
+        setCurrentUser(localStorage.getItem('user'))
+        setToken(localStorage.getItem('token').toString())
+    }
+
     const data = {
         currentUser,
         setCurrentUser,
         token,
-        setToken
+        setToken,
+        getFromLocalStorage
     }
 
     return (

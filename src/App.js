@@ -8,14 +8,17 @@ import Event from './components/event/Event';
 import Home from './components/home/Home';
 import Register from './components/login/register';
 import Login from './components/login/login'
-import { UserProvider, UserContext } from './context/UserContext';
+import Logout from './components/login/logout';
+import { UserContext, UserProvider } from './context/UserContext';
 
 function App() {
+
   useEffect(() => {
-    document.title = "React"
+    document.title = "Aktivitee"
   }, [])
 
-  const { token } = useContext(UserContext);
+  const token = localStorage.getItem('token')
+  console.log(token)
   if (token){
   return (
     <UserProvider>   
@@ -25,12 +28,23 @@ function App() {
         <Route path="/event/:id" element={<Event/>} />
         <Route path="/create" element={<CreateEvent/>} />
         <Route path='*' element={<Navigate to="/home" />} />
-        <Route path="/register" element={<Register/>}/>
-        <Route path="/login" element={<Login/>}/>
+        <Route path="/logout" element={<Logout/>}/>
       </Routes>
   </BrowserRouter>
   </UserProvider>
   );
+  } else {
+    return (
+      <UserProvider>   
+      <BrowserRouter>
+        <Routes>
+          <Route path='*' element={<Navigate to="/login" />} />
+          <Route path="/register" element={<Register/>}/>
+          <Route path="/login" element={<Login/>}/>
+        </Routes>
+    </BrowserRouter>
+    </UserProvider>
+    );
   }
 }
 

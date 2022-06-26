@@ -1,10 +1,10 @@
-import { Box, Button, Divider, Stack, TextField } from '@mui/material'
+import { Box, Button, Divider, Stack, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import SendIcon from '@mui/icons-material/Send';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
-const CreateRequest = () => {
+const CreateRequest = ({onClose}) => {
   let { id } = useParams()
   const [inputContent, setInputContent] = useState('')
   const handleSubmit = async (e) => {
@@ -25,11 +25,15 @@ const CreateRequest = () => {
     //   console.log(err)
     //   setOpen(true)
     // }
+    onClose()
   }
 
   return (
     <Box id="create-request-box" sx={{p:2,maxWidth:600}}>
-        <Box component="form" onSubmit={handleSubmit} sx={{width:"90%"}}  >
+        <Typography variant='h5'>
+          Write a message
+        </Typography>
+        <Box component="form" onSubmit={handleSubmit} sx={{width:"100%"}}  >
           <TextField
             multiline
             required
@@ -43,13 +47,16 @@ const CreateRequest = () => {
             sx={{width:"100%"}}
             
           />
-          <Button
-            type="submit"
-            variant="contained"
-            endIcon={<SendIcon />} 
-            sx={{mt:2}}>
-              Send
-          </Button>
+          <Box sx={{ display: "flex", justifyContent: "flex-end"}}>
+            <Button
+              type="submit"
+              variant="contained"
+              endIcon={<SendIcon />} 
+              sx={{mt:2}}>
+                Send
+            </Button>
+          </Box>
+
         </Box>
     </Box>
   )

@@ -1,4 +1,4 @@
-import { Box, Divider, Stack } from '@mui/material'
+import { Box, Divider, Stack, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import Request from './Request'
 
@@ -39,9 +39,12 @@ const RequestList = () => {
         spacing={2}
         divider={<Divider orientation="horizontal" flexItem />}
       >
-      {request && request.map((val, idx)=> (
-        <Request key={idx} commentData={val}/>
-      ))}
+        <Typography variant='h5'>
+          Requests
+        </Typography>
+        {request && request.map((val, idx)=> (
+          <Request key={idx} commentData={val}/>
+        ))}
       </Stack>
     </Box>
 

@@ -34,10 +34,11 @@ function Login() {
             }
           })
         .then(response => {
-            console.log(response);
             setCurrentUser(data.username);
             setToken(response.data.access_token)
-            navigate((`/home`));
+            localStorage.setItem('token', response.data.access_token)
+            localStorage.setItem('user', data.username)
+            window.location.reload();
         })
         .catch(error => {
             console.error('There was an error!', error);
@@ -55,7 +56,7 @@ function Login() {
             <Typography 
             variant="h4" 
             align="center" 
-            sx={{ m:1, color : "blue", fontWeight: 900, fontFamily: 'Lucida Console'}}>
+            sx={{ m:1, color : "#7DF9FF", fontWeight: 900, fontFamily: 'Lucida Console'}}>
                 Aktivitee
             </Typography>
             <Typography 

@@ -1,8 +1,10 @@
-import React, { useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import axios from 'axios';
 import {Box, Button, Divider, IconButton, Paper, Stack, TextField, Typography} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
+import { UserContext } from '../../context/UserContext';
+import { useNavigate } from 'react-router-dom';
 
 const CreateEvent = () => {
   const [searchResult, setSearchResult] = useState([])
@@ -13,8 +15,9 @@ const CreateEvent = () => {
   const [inputDescription, setInputDescription] = useState('')
   const [inputContact, setInputContact] = useState('')
   const [inputParticipant, setInputParticipant] = useState('')
-  const [inputTime, setInputTime] = useState(Date.now())
-
+  const [inputTime, setInputTime] = useState(new Date().toISOString().replace('Z', ''))
+  const {getFromLocalStorage, token} = useContext(UserContext)
+  let navigate = useNavigate()
 
   const handleSearch = async (e) => {
     console.log(inputLocation)
@@ -41,8 +44,15 @@ const CreateEvent = () => {
     setSearchResult([])
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
+    const options = {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    }
     let data = {
       name: inputName,
       description: inputDescription,
@@ -51,10 +61,28 @@ const CreateEvent = () => {
       location: inputLocation,
       contact: inputContact,
       maxParticipants: inputParticipant,
-      datetime: new Date(inputTime).getTime()
+      datetime: new Date(inputTime).getTime(),
+      creator: ""
     }
     console.log(data)
+    try{
+      let res = await axios.post(`https://freyhack-be-2022.herokuapp.com/api/v1/event`, options, data)
+      setSearchResult(res.data)
+      console.log(res.data)
+    } catch(err) {
+      console.log(err)
+      if (err.response && err.response.status === 401){
+        navigate('/login')
+      } else {
+        alert("Something went wrong")
+      }
+    }
   }
+
+  useEffect(() => {
+    getFromLocalStorage()
+  }, [])
+  
 
   return (
     <Paper 
@@ -82,6 +110,7 @@ const CreateEvent = () => {
           >
             <TextField
               required
+              autoComplete="off"
               onKeyDown={(e) => {if(e.keyCode === 13){handleSearch()}}}
               value={inputLocation}
               label="Location Address"
